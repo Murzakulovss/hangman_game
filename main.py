@@ -1,6 +1,4 @@
 import random
-from operator import contains
-from random import choice
 
 def game():
     words = [
