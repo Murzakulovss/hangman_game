@@ -1,140 +1,77 @@
 import random
+from words_list import words
 
-def game():
-    words = [
-        "машина",
-        "комната",
-        "заводчик",
-        "учитель",
-        "письмо",
-        "морозец",
-        "проект",
-        "трактор",
-        "погода",
-        "картинка",
-        "сказание",
-        "платформа",
-        "праздник",
-        "солнце",
-        "столица",
-        "пластик",
-        "ключница",
-        "галерея",
-        "пещера",
-        "ветерок"
-    ]
-    word = random.choice(words)
-    guessed_letters = []
-    mistakes = []
-    tries = 6
-    hangman_stages = [
-        '''
-           _______
-          |/      
-          |      
-          |      
-          |      
-          |     
-         _|___
-        ''',
-        '''
-           _______
-          |/      |
-          |      (_)
-          |      
-          |      
-          |     
-         _|___
-        ''',
-        '''
-           _______
-          |/      |
-          |      (_)
-          |       |
-          |       |
-          |     
-         _|___
-        ''',
-        '''
-           _______
-          |/      |
-          |      (_)
-          |      \|
-          |       |
-          |     
-         _|___
-        ''',
-        '''
-           _______
-          |/      |
-          |      (_)
-          |      \|/
-          |       |
-          |     
-         _|___
-        ''',
-        '''
-           _______
-          |/      |
-          |      (_)
-          |      \|/
-          |       |
-          |      / 
-         _|___
-        ''',
-        '''
-           _______
-          |/      |
-          |      (_)
-          |      \|/
-          |       |
-          |      / |
-         _|___
-        '''
-    ]
-    while tries > 0:
-        display_word = ""
-        player_guess = input("Guess a letter: ")
+class HangmanGame:
+    def __init__(self):
+        self.word = random.choice(words)
+        self.guessed_letters = []
+        self.mistakes = []
+        self.tries = 6
+        self.masked_word = ""
 
-        if len(player_guess) > 1:
+    def new_game(self):
+        start = input("[N]ew game? or [E]xit?:  ")
+        if start.lower() == 'n':
+            self.reset()
+            self.start_game()
+        else:
+            exit()
+
+    def start_game(self):
+        while self.tries > 0:
+            self.guess(input("guess a letter: "))
+            self.display_word()
+            self.check_win()
+
+    def guess(self, letter):
+        if len(letter) > 1:
             print("only one letter")
-            continue
-        elif player_guess in guessed_letters or player_guess in mistakes:
+            return
+        elif letter in self.guessed_letters or letter in self.mistakes:
             print("you already checked this letter")
-            continue
-        elif player_guess in word:
-            guessed_letters.append(player_guess)
+            return
+        elif letter in self.word:
+            self.guessed_letters.append(letter)
             print("hit!")
         else:
-            tries -= 1
-            mistakes.append(player_guess)
-            print(mistakes)
-            print(f"{tries} tries")
+            self.tries-=1
+            self.mistakes.append(letter)
+            print(self.mistakes)
+            print(f"{self.tries} tries")
 
-        for letter in word:
-            if letter in guessed_letters:
-                display_word += letter
+    def display_word(self):
+        self.masked_word = ""
+        for letter in self.word:
+            if letter in self.guessed_letters:
+                self.masked_word+=letter
             else:
-                display_word += "*"
-        print(display_word)
+                self.masked_word+="*"
+        print(self.masked_word)
 
-        if display_word == word:
-            print("Победа!")
-            new_game()
+    def check_win(self):
+        if self.masked_word == self.word:
+            print("You won!")
+            self.new_game()
             return
-        if tries == 0:
-            new_game()
+        else:
+            self.check_loss()
+
+    def check_loss(self):
+        if self.tries == 0:
+            print(f"The word was: {self.word}")
+            self.new_game()
             return
 
-def new_game():
-    start = input("[N]ew game? or [E]xit?:  ")
-    if start.lower() == 'n':
-        game()
-    else:
-        exit()
+    def reset(self):
+        self.word = random.choice(words)
+        self.guessed_letters = []
+        self.mistakes = []
+        self.tries = 6
+        self.masked_word = ""
 
-new_game()
 
+h = HangmanGame()
+h.new_game()
 
 
 
