@@ -1,5 +1,6 @@
 import random
 from words_list import words
+from hangman_stages import hangman
 
 class Game:
     def __init__(self):
@@ -74,6 +75,7 @@ class Player:
             self.mistakes.append(letter)
             print(self.mistakes)
             print(f"{self.tries} tries")
+            print(hangman[self.tries])
 
 
 g = Game()
