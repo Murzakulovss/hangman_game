@@ -1,6 +1,7 @@
 import random
 from words_list import words
 from hangman_stages import hangman
+from validation_input import cyrillic_lower_letters
 
 class Game:
     def __init__(self):
@@ -18,8 +19,7 @@ class Game:
 
     def start_game(self):
         while self.player.tries > 0:
-            letter = input("guess a letter: ")
-            self.player.guess(letter, self.word)
+            self.check_validation()
             self.display_word()
             self.check_win()
 
@@ -31,6 +31,15 @@ class Game:
             else:
                 self.masked_word+="*"
         print(self.masked_word)
+
+    def check_validation(self):
+        letter = input("guess a letter: ")
+        if letter.lower() in cyrillic_lower_letters:
+            self.player.guess(letter, self.word)
+        else:
+            print("only cyrillic letter accepted")
+            return
+
 
     def check_win(self):
         if self.masked_word == self.word:
