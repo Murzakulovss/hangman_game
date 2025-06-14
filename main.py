@@ -46,14 +46,11 @@ class Game:
             print("You won!")
             self.new_game()
             return
-        else:
-            self.check_loss()
-
-    def check_loss(self):
-        if self.player.tries == 0:
+        elif self.player.tries == 0:
             print(f"The word was: {self.word}")
             self.new_game()
             return
+
 
     def reset(self):
         self.word = random.choice(words)
@@ -85,6 +82,11 @@ class Player:
             print(self.mistakes)
             print(f"{self.tries} tries")
             print(hangman[self.tries])
+
+
+
+
+
 
 
 g = Game()
